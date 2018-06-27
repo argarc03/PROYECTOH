@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Floor
+  - Sleep
   layers:
   - Default
   - TransparentFX
@@ -16,14 +17,14 @@ TagManager:
   - 
   - 
   - 
+  - Floor
   - 
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - Player
   - 
   - 
   - 
@@ -41,4 +42,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 3445005325
+    locked: 0
+  - name: Player
+    uniqueID: 310449405
     locked: 0

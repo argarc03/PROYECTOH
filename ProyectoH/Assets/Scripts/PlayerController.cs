@@ -14,27 +14,59 @@ public class PlayerController : MonoBehaviour
 	//Grounded Vars
 	bool grounded = true;
 
-	void FixedUpdate () 
-	{
-		//Jumping
-		if (Input.GetKeyDown (KeyCode.Space) || Input.GetKeyDown (KeyCode.UpArrow) || Input.GetKeyDown (KeyCode.Z) || Input.GetKeyDown (KeyCode.W)) 
-		{
-			if(grounded)
-			{
-				GetComponent<Rigidbody2D> ().velocity = new Vector2 (GetComponent<Rigidbody2D> ().velocity.x, jump);
-			}
-		}
+	int inactiveTime = 0;
+	Animator anim;
+	GameObject sleep;
 
+	void Start()
+	{
+		anim = GameObject.FindWithTag ("Player").GetComponent<Animator> ();
+		sleep = GameObject.FindWithTag ("Sleep");
+
+		sleep.SetActive (false);
+	}
+
+	void FixedUpdate ()
+	{
 		moveVelocity = 0;
 
 		//Left Right Movement
 		if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) 
 		{
 			moveVelocity = -speed;
+
+			GameObject.FindWithTag ("Player").GetComponent<SpriteRenderer> ().flipX = true;
+			sleep.SetActive (false);
+			inactiveTime = 0;
 		}
 		if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) 
 		{
 			moveVelocity = speed;
+
+			GameObject.FindWithTag ("Player").GetComponent<SpriteRenderer> ().flipX = false;
+			sleep.SetActive (false);
+			inactiveTime = 0;
+			anim.SetBool ("Dormida", false);
+		}
+
+		//Jumping
+		if (Input.GetKeyDown (KeyCode.Space) || Input.GetKeyDown (KeyCode.UpArrow) || Input.GetKeyDown (KeyCode.W)) {
+			if (grounded) 
+			{
+				GetComponent<Rigidbody2D> ().velocity = new Vector2 (GetComponent<Rigidbody2D> ().velocity.x, jump);
+				sleep.SetActive (false);
+				inactiveTime = 0;
+				anim.SetBool ("Dormida", false);
+			}
+		} else if (moveVelocity == 0) {
+			inactiveTime++;
+
+			if (inactiveTime == 500)
+				anim.SetTrigger ("Bostezo");
+			else if (inactiveTime == 1000) {
+				anim.SetBool ("Dormida", true);
+				sleep.SetActive (true);
+			}
 		}
 
 		GetComponent<Rigidbody2D> ().velocity = new Vector2 (moveVelocity, GetComponent<Rigidbody2D> ().velocity.y);
