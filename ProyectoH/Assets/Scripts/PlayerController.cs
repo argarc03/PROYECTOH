@@ -30,25 +30,28 @@ public class PlayerController : MonoBehaviour
 	{
 		moveVelocity = 0;
 
-		//Left Right Movement
+		//Left Movement
 		if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) 
 		{
 			moveVelocity = -speed;
 
 			GameObject.FindWithTag ("Player").GetComponent<SpriteRenderer> ().flipX = true;
 			sleep.SetActive (false);
+			anim.SetBool ("Walking", true);
+			anim.SetBool ("Dormida", false);
 			inactiveTime = 0;
 		}
+		//Right Movement
 		if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) 
 		{
 			moveVelocity = speed;
 
 			GameObject.FindWithTag ("Player").GetComponent<SpriteRenderer> ().flipX = false;
 			sleep.SetActive (false);
-			inactiveTime = 0;
+			anim.SetBool ("Walking", true);
 			anim.SetBool ("Dormida", false);
+			inactiveTime = 0;
 		}
-
 		//Jumping
 		if (Input.GetKeyDown (KeyCode.Space) || Input.GetKeyDown (KeyCode.UpArrow) || Input.GetKeyDown (KeyCode.W)) {
 			if (grounded) 
@@ -60,6 +63,7 @@ public class PlayerController : MonoBehaviour
 			}
 		} else if (moveVelocity == 0) {
 			inactiveTime++;
+			anim.SetBool ("Walking", false);
 
 			if (inactiveTime == 500)
 				anim.SetTrigger ("Bostezo");
